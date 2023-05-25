@@ -14,7 +14,8 @@ namespace TopTenMusicAlbums.WebApi.Controllers
 
         public MusicAlbumController()
         {
-            listOfAlbum = new List<MusicAlbum>()
+             
+            listOfAlbum = new List<MusicAlbum>
                 {
             new MusicAlbum{Id = 1, Title = "The Nashville Session", Artist = "The New Mastersounds", Genre = "Funk"},
             new MusicAlbum{Id = 2, Title = "Kind Of Blue", Artist = "Miles Davis", Genre = "Jazz"},
@@ -43,18 +44,28 @@ namespace TopTenMusicAlbums.WebApi.Controllers
         }
 
         // POST api/values
-        public void Post([FromBody] string value)
+        public string Post([FromBody] string value)
         {
         }
 
         // PUT api/values/5
-        public void Put(int id, [FromBody] string value)
+        public string Put(int id, [FromBody] string value)
         {
         }
 
         // DELETE api/values/5
-        public void Delete(int id)
+        public List<MusicAlbum> Delete(int id)
         {
+            /* foreach(MusicAlbum album in listOfAlbum)
+             {
+                 if (album.Id == id)
+                 {
+                     listOfAlbum.Remove(album);
+                     break;
+                 };
+             }*/
+            listOfAlbum.RemoveAll(p => p.Id == id);
+            return listOfAlbum;
         }
     }
 }
