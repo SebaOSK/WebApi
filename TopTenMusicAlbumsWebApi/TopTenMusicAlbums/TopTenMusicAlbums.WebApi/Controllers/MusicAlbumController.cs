@@ -54,18 +54,29 @@ namespace TopTenMusicAlbums.WebApi.Controllers
 
 
         // PUT api/values/5
-        public MusicAlbum Put(int id, [FromBody] MusicAlbum updateAlbum)
+        public HttpResponseMessage Put(int id, [FromBody] MusicAlbum updateAlbum)
         {
             MusicAlbum album = listOfAlbums.FirstOrDefault(p => p.Id == id);
 
-            if (album.Id != 0)
+            if (album == null)
             {
-                album.Title  = updateAlbum.Title;
-                album.Artist = updateAlbum.Artist;
-                album.Genre = updateAlbum.Genre;
+                return Request.CreateResponse(HttpStatusCode.NotFound, "Album Not Found");
 
-            }
-            return listOfAlbums[album.Id];
+            };
+
+            if(updateAlbum.Title != null)
+            { album.Title = updateAlbum.Title; }
+
+            if (updateAlbum.Artist != null)
+            { album.Artist = updateAlbum.Artist; }
+
+            if (updateAlbum.Genre != null)
+            { album.Genre = updateAlbum.Genre; }
+
+
+
+            return Request.CreateResponse(HttpStatusCode.OK, listOfAlbums[album.Id - 1]);
+            
         }
 
         // DELETE api/values/5
