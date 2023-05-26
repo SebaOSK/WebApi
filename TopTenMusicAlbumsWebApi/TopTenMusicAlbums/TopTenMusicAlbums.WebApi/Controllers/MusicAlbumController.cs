@@ -46,10 +46,19 @@ namespace TopTenMusicAlbums.WebApi.Controllers
         }
 
         // POST api/values
-        public MusicAlbum Post([FromBody] MusicAlbum newAlbum)
+        public HttpResponseMessage Post([FromBody] MusicAlbum newAlbum)
         {
+            foreach(MusicAlbum album in listOfAlbums)
+            {
+                if (album.Title == newAlbum.Title || album.Id == newAlbum.Id)
+                {
+                    return Request.CreateResponse(HttpStatusCode.Found, $"Album in list: {album.Title}, {album.Artist} ");
+                }
+            };
+
             listOfAlbums.Add(new MusicAlbum { Id = newAlbum.Id, Title = newAlbum.Title, Artist = newAlbum.Artist, Genre = newAlbum.Genre });
-            return listOfAlbums.Find(p => p.Id==newAlbum.Id);
+            
+            return Request.CreateResponse(HttpStatusCode.OK, listOfAlbums);
         }
 
 
@@ -62,24 +71,22 @@ namespace TopTenMusicAlbums.WebApi.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.NotFound, "Album Not Found");
 
-            };
+            }
 
-            if (updateAlbum.Id != null)
+            else
             {
-                return Request.CreateResponse(HttpStatusCode.Forbidden, "Invalid Operation");
-                    
+                if (updateAlbum.Title != null)
+                { album.Title = updateAlbum.Title; }
+
+                if (updateAlbum.Artist != null)
+                { album.Artist = updateAlbum.Artist; }
+
+                if (updateAlbum.Genre != null)
+                { album.Genre = updateAlbum.Genre; }
+
+                return Request.CreateResponse(HttpStatusCode.OK, $"Succesful update: {album.Title}, {album.Artist}, {album.Genre}");
             };
-
-            if(updateAlbum.Title != null)
-            { album.Title = updateAlbum.Title; }
-
-            if (updateAlbum.Artist != null)
-            { album.Artist = updateAlbum.Artist; }
-
-            if (updateAlbum.Genre != null)
-            { album.Genre = updateAlbum.Genre; }
-
-            return Request.CreateResponse(HttpStatusCode.OK, "Succesful update");
+            
             
         }
 
