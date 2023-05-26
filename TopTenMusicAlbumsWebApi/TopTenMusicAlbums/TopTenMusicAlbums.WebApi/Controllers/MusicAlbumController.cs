@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Ajax.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -10,12 +11,7 @@ namespace TopTenMusicAlbums.WebApi.Controllers
 {
     public class MusicAlbumController : ApiController
     {
-        public List<MusicAlbum> listOfAlbum;
-
-        public MusicAlbumController()
-        {
-             
-            listOfAlbum = new List<MusicAlbum>
+        public static List<MusicAlbum> listOfAlbums = new List<MusicAlbum>
                 {
             new MusicAlbum{Id = 1, Title = "The Nashville Session", Artist = "The New Mastersounds", Genre = "Funk"},
             new MusicAlbum{Id = 2, Title = "Kind Of Blue", Artist = "Miles Davis", Genre = "Jazz"},
@@ -29,28 +25,40 @@ namespace TopTenMusicAlbums.WebApi.Controllers
             new MusicAlbum{Id = 10, Title = "We Like It Here", Artist = "Snarky Puppy", Genre = "Jazz"},
 
         };
-        }
         
         // GET api/values
         public  List<MusicAlbum> Get()
         {
-            return listOfAlbum;
+            return listOfAlbums;
         }
 
         // GET api/values/5
         public MusicAlbum Get(int id)
         {
-            return listOfAlbum.Find(p => p.Id == id);
+            return listOfAlbums.Find(p => p.Id == id);
         }
 
         // POST api/values
-        public string Post([FromBody] string value)
+        public MusicAlbum Post([FromBody] MusicAlbum newAlbum)
         {
+            listOfAlbums.Add(new MusicAlbum { Id = newAlbum.Id, Title = newAlbum.Title, Artist = newAlbum.Artist, Genre = newAlbum.Genre });
+            return listOfAlbums.Find(p => p.Id==newAlbum.Id);
         }
 
+
         // PUT api/values/5
-        public string Put(int id, [FromBody] string value)
+        public MusicAlbum Put(int id, [FromBody] MusicAlbum updateAlbum)
         {
+            MusicAlbum album = listOfAlbums.FirstOrDefault(p => p.Id == id);
+
+            if (album.Id != 0)
+            {
+                album.Title  = updateAlbum.Title;
+                album.Artist = updateAlbum.Artist;
+                album.Genre = updateAlbum.Genre;
+
+            }
+            return listOfAlbums[album.Id];
         }
 
         // DELETE api/values/5
@@ -64,8 +72,8 @@ namespace TopTenMusicAlbums.WebApi.Controllers
                      break;
                  };
              }*/
-            listOfAlbum.RemoveAll(p => p.Id == id);
-            return listOfAlbum;
+            listOfAlbums.RemoveAll(p => p.Id == id);
+            return listOfAlbums;
         }
     }
 }
