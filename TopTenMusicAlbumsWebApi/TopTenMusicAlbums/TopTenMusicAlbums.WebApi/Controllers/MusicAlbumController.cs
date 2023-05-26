@@ -27,15 +27,22 @@ namespace TopTenMusicAlbums.WebApi.Controllers
         };
         
         // GET api/values
-        public  List<MusicAlbum> Get()
+        public  HttpResponseMessage Get()
         {
-            return listOfAlbums;
+            return Request.CreateResponse(HttpStatusCode.OK, listOfAlbums);
         }
 
         // GET api/values/5
-        public MusicAlbum Get(int id)
+        public HttpResponseMessage Get(int id)
         {
-            return listOfAlbums.Find(p => p.Id == id);
+            MusicAlbum album = listOfAlbums.Find(p => p.Id == id);
+           
+            if (album == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, "Album Not Found");
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, album);
+            
         }
 
         // POST api/values
