@@ -64,6 +64,12 @@ namespace TopTenMusicAlbums.WebApi.Controllers
 
             };
 
+            if (updateAlbum.Id != null)
+            {
+                return Request.CreateResponse(HttpStatusCode.Forbidden, "Invalid Operation");
+                    
+            };
+
             if(updateAlbum.Title != null)
             { album.Title = updateAlbum.Title; }
 
@@ -73,14 +79,12 @@ namespace TopTenMusicAlbums.WebApi.Controllers
             if (updateAlbum.Genre != null)
             { album.Genre = updateAlbum.Genre; }
 
-
-
-            return Request.CreateResponse(HttpStatusCode.OK, listOfAlbums[album.Id - 1]);
+            return Request.CreateResponse(HttpStatusCode.OK, "Succesful update");
             
         }
 
         // DELETE api/values/5
-        public List<MusicAlbum> Delete(int id)
+        public HttpResponseMessage Delete(int id)
         {
             /* foreach(MusicAlbum album in listOfAlbum)
              {
@@ -90,8 +94,18 @@ namespace TopTenMusicAlbums.WebApi.Controllers
                      break;
                  };
              }*/
+
+            MusicAlbum album = listOfAlbums.FirstOrDefault(p => p.Id == id);
+
+            if(album == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, "Album Not Found");
+            }
+
             listOfAlbums.RemoveAll(p => p.Id == id);
-            return listOfAlbums;
+
+            return Request.CreateResponse(HttpStatusCode.OK, $"Deleted: {album.Title}, {album.Artist}");
+            
         }
     }
 }
