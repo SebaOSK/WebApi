@@ -11,7 +11,7 @@ namespace TopTenMusicAlbums.WebApi.Controllers
 {
     public class MusicAlbumController : ApiController
     {
-        public static List<MusicAlbum> listOfAlbums = new List<MusicAlbum>
+        public static List<MusicAlbum> listOfAlbums = new List<MusicAlbum>()
                 {
             new MusicAlbum{Id = 1, Title = "The Nashville Session", Artist = "The New Mastersounds", Genre = "Funk"},
             new MusicAlbum{Id = 2, Title = "Kind Of Blue", Artist = "Miles Davis", Genre = "Jazz"},
