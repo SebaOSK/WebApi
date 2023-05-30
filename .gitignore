@@ -32,3 +32,6 @@
 *.app
 *.vsidx
 *.suo
+
+# .vs folder
+TopTenAlbums/.vs/
